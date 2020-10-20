@@ -21,6 +21,8 @@ class DashboardController extends AbstractController
 
 
 
+
+
         if($this->getUser()->getStatus()=='Admin'){
             $ordersRepository = $this->getDoctrine()->getRepository(Orders::class);
             $orders = $ordersRepository->findAll();
@@ -60,8 +62,11 @@ class DashboardController extends AbstractController
      * @Route("/orders/update/{id}", name="update_order")
      */
     public function updateOrder($id){
+
+
         $orderRespository = $this->getDoctrine()->getRepository(Orders::class);
         $order = $orderRespository->find($id);
+
 
 
         $productRespository = $this->getDoctrine()->getRepository(Products::class);
@@ -84,10 +89,16 @@ class DashboardController extends AbstractController
      */
     public function updateOrderAction($id ,Request $request){
 
-
         $entityManager = $this->getDoctrine()->getManager();
         $orderRespository = $entityManager->getRepository(Orders::class);
         $orders = $orderRespository->find($id);
+
+        $date = new DateTime($orders->getShippingDate());
+        $now = new DateTime();
+
+        if($date < $now) {
+            return new Response(sprintf('You cant edit this order because shipping date is passed  <a href="/">Go To List</a>'));
+        }
 
         $orders ->setAddress($request->request->get('address'))
             ->setProductId($request->request->get('product'))
