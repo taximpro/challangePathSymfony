@@ -20,9 +20,6 @@ class DashboardController extends AbstractController
     {
 
 
-
-
-
         if($this->getUser()->getStatus()=='Admin'){
             $ordersRepository = $this->getDoctrine()->getRepository(Orders::class);
             $orders = $ordersRepository->findAll();
@@ -117,12 +114,18 @@ class DashboardController extends AbstractController
      */
     public function createOrderAction(Request $request){
 
+        //$product = new Products();
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $product = $entityManager->getRepository(Products::class)->find($request->request->get('product'));
+
+
         //dd($request->request->get('quantity'));
         $entityManager = $this->getDoctrine()->getManager();
         $orders = new Orders();
         $orders ->setAddress($request->request->get('address'))
-            ->setCustomerId($this->getUser()->getId())->setProductId($request->request->get('product'))->setOrderCode(random_int(100, 400))
-            ->setQuantity($request->request->get('quantity'))->setShippingDate( date('d-m-Y', strtotime('+1 week')));
+            ->setCustomerId($this->getUser()->getId())->setProduct($product)->setOrderCode(random_int(100, 400))
+            ->setQuantity($request->request->get('quantity'))->setShippingDate( date('d-m-Y', strtotime('+1 week')))->setProductId(3);
         $entityManager->persist($orders);
         $entityManager->flush();
 

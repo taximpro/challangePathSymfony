@@ -25,7 +25,7 @@ class Products
     private $product_name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="product")
      */
     private $orders;
 
@@ -54,35 +54,6 @@ class Products
         return $this;
     }
 
-    /**
-     * @return Collection|Orders[]
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
 
-    public function addOrder(Orders $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Orders $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getProduct() === $this) {
-                $order->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
 
 }

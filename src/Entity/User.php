@@ -40,9 +40,6 @@ class User implements UserInterface, \Serializable
      */
     private $status;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user", orphanRemoval=true)
-     */
     private $orders;
 
     public function __construct()

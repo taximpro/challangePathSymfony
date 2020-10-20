@@ -52,8 +52,7 @@ class Orders
     private $customerId;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Products::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Products::class, inversedBy="orders",cascade={"persist"})
      */
     private $product;
 
@@ -142,9 +141,9 @@ class Orders
         return $this->product;
     }
 
-    public function setProduct(?Products $product_name): self
+    public function setProduct(?Products $product): self
     {
-        $this->product_name = $product_name;
+        $this->product = $product;
 
         return $this;
     }
